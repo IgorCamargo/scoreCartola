@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="">
+  <div id="scores" class="">
 
     <!-- exemplo usando localstorage -->
     <p><input type="text" placeholder="teste" v-model="team"/></p>
@@ -9,8 +9,9 @@
       <button @click="searchTeam">Search</button>
     </p>
 
-    <!-- here, list teams searcheds -->
-    <div class="result-content"
+
+    <!-- here, team search -->
+    <!-- <div class="result-content"
       v-if="(dataLogoTeam !== null) && (dataNameTeam !== null) && (dataNameUser !== null) && (dataLogoUser !== null)">
       <div class="result-content-logo">
         <img :src="dataLogoTeam" alt="">
@@ -22,16 +23,29 @@
           <div id="nameUser">{{ dataNameUser }}</div>
         </div>
       </div>
-    </div>
+    </div> -->
+    <soughtout
+      v-bind:logoTeam="dataLogoTeam"
+      v-bind:nameTeam="dataNameTeam"
+      v-bind:nameUser="dataNameUser"
+      v-bind:logoUser="dataLogoUser"
+    ></soughtout>
+
 
   </div>
 </template>
 
 <script>
 // https://github.com/wgenial/cartrolandofc/blob/master/nova-api.md
+import soughtout from './Soughtout.vue'
+
 import axios from 'axios'
 
 export default {
+  name: 'scores',
+  components: {
+    soughtout
+  },
   data () {
     return {
       team: 'teste storage',
