@@ -2,10 +2,13 @@
   <div id="scores" class="">
 
     <!-- exemplo usando localstorage -->
-    <p><input type="text" placeholder="teste" v-model="team"/></p>
+    <!-- <p><input type="text" placeholder="teste" v-model="team"/></p> -->
 
     <p>
-      <input type="text" placeholder="search team name" v-model="nameTeam"/>
+      <input type="text"
+        placeholder="search team name"
+        v-model="nameTeam"
+        autofocus/>
       <button @click="searchTeam">Search</button>
     </p>
 
@@ -24,12 +27,14 @@
         </div>
       </div>
     </div> -->
-    <soughtout
+    <div class="soughtout">
+      <soughtout
       v-bind:logoTeam="dataLogoTeam"
       v-bind:nameTeam="dataNameTeam"
       v-bind:nameUser="dataNameUser"
       v-bind:logoUser="dataLogoUser"
-    ></soughtout>
+      ></soughtout>
+    </div>
 
 
   </div>
@@ -75,7 +80,8 @@ export default {
   methods: {
     searchTeam: function () {
       var self = this;
-      axios
+      if (( this.nameTeam != null ) && ( this.nameTeam != '' )) {
+        axios
         .get('https://api.cartolafc.globo.com/times?q='+this.nameTeam)
         .then(function(response){
           if (response.data.error) {
@@ -87,7 +93,7 @@ export default {
             self.dataNameUser = response.data[0].nome_cartola
             self.dataLogoUser = response.data[0].foto_perfil
 
-// armazeno o slug e se confirmado clicando adiciona com o scrpt abaixo para trazer a soma dos pontos
+            // armazeno o slug e se confirmado clicando adiciona com o scrpt abaixo para trazer a soma dos pontos
             // axios
             //   .get('https://api.cartolafc.globo.com/time/slug/'+slug)
             //   .then(function(response){
@@ -100,59 +106,48 @@ export default {
             //       console.log(teste.rodada_atual);
             //     }
             //   });
-
-
           }
         });
+      }
+      else {
+        console.log('err');
+      }
     }
   }
 }
 </script>
 
 <style lang="css">
-.result-content {
-  width: 80vw;
-  padding: 2em;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
+#scores p {
+  width: 100%;
+  text-align: center;
+  padding: 4vh;
+  border-bottom: 1px solid #000;
+  /* background-color: yellow; */
+}
+#scores p input {
+  width: 50%;
+  padding: 10px;
+  border: 1px solid #D3FFCE;
+  text-decoration: none;
+  border-radius: 4px;
+}
+#scores p button {
+  padding: 10px;
+  margin-left: 10px;
+  border: 0;
+  border-radius: 4px;
+  text-decoration: none;
+  background-color: #ddd;
   cursor: pointer;
-  color: #000;
-  background-color: #f0f3f5;
-  border: 1px solid #bcb8ff;
-  border-radius: 5px;
 }
-.result-content:hover {
-  background-color: #d8dadc;
+#scores p button:hover {
+  background-color: #eee;
 }
-.result-content-logo {
-  width: 25%;
+#scores p button:active {
+  background-color: #ddd;
 }
-.result-content-logo img {
-  width: 75px;
-  height: 75px;
-}
-.result-content-info {
-  width: 75%;
-}
-#nameTeam {
-  text-align: left;
-  font-size: 22px;
-}
-.result-content-info-user {
-  display: flex;
-  align-items: center;
-  padding: 0.5em 0;
-}
-#logoUser {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #000;
-  border-radius: 5px;
-}
-#nameUser {
-  padding: 0 1em;
-  font-size: 12px;
-  color: #989bab;
+#scores .soughtout {
+  border-bottom: 1px solid #000;
 }
 </style>
