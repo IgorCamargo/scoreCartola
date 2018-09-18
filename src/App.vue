@@ -61,11 +61,12 @@ header span {
   /* height: 10vh; */
   /* display: flex;
   align-items: center; */
-  background-color: darkred;
+  /* background-color: darkred; */
 }
 #app .teams {
   height: 47vh;
   overflow-y: auto;
+  border-top: 1px solid #000;
   background-color: darkblue;
 }
 </style>

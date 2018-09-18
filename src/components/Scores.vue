@@ -12,34 +12,23 @@
       <button @click="searchTeam">Search</button>
     </p>
 
-
-    <!-- here, team search -->
-    <!-- <div class="result-content"
-      v-if="(dataLogoTeam !== null) && (dataNameTeam !== null) && (dataNameUser !== null) && (dataLogoUser !== null)">
-      <div class="result-content-logo">
-        <img :src="dataLogoTeam" alt="">
-      </div>
-      <div class="result-content-info">
-        <div id="nameTeam">{{ dataNameTeam }}</div>
-        <div class="result-content-info-user">
-          <img id="logoUser" :src="dataLogoUser" alt="">
-          <div id="nameUser">{{ dataNameUser }}</div>
-        </div>
-      </div>
-    </div> -->
-    <div class="soughtout">
+    <div class="soughtout" v-bind:class="{ soughtoutContent: isSearch }">
       <soughtout
-      v-bind:logoTeam="dataLogoTeam"
-      v-bind:nameTeam="dataNameTeam"
-      v-bind:nameUser="dataNameUser"
-      v-bind:logoUser="dataLogoUser"
+        v-bind:logoTeam="dataLogoTeam"
+        v-bind:nameTeam="dataNameTeam"
+        v-bind:nameUser="dataNameUser"
+        v-bind:logoUser="dataLogoUser"
       ></soughtout>
+      <div class="x-close"
+        v-if="isSearch">
+        <span @click="close">&Cross;</span>
+      </div>
     </div>
-
 
   </div>
 </template>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
 <script>
 // https://github.com/wgenial/cartrolandofc/blob/master/nova-api.md
 import soughtout from './Soughtout.vue'
@@ -59,7 +48,8 @@ export default {
       dataLogoTeam: null,
       dataNameUser: null,
       dataLogoUser: null,
-      slugTeam: null
+      slugTeam: null,
+      isSearch: false
     }
   },
   mounted () {
@@ -79,6 +69,9 @@ export default {
   },
   methods: {
     searchTeam: function () {
+
+      this.show = true
+
       var self = this;
       if (( this.nameTeam != null ) && ( this.nameTeam != '' )) {
         axios
@@ -87,6 +80,8 @@ export default {
           if (response.data.error) {
             console.log(response.data.message);
           } else {
+            self.isSearch = true
+
             self.slugTeam = response.data[0].slug
             self.dataNameTeam = response.data[0].nome
             self.dataLogoTeam = response.data[0].url_escudo_svg
@@ -111,7 +106,21 @@ export default {
       }
       else {
         console.log('err');
+        this.dataNameTeam = null
+        this.dataLogoTeam = null
+        this.dataNameUser = null
+        this.dataLogoUser = null
+        this.show = false
+        this.isSearch = false
       }
+    },
+    close: function () {
+      this.dataNameTeam = null
+      this.dataLogoTeam = null
+      this.dataNameUser = null
+      this.dataLogoUser = null
+      this.show = false
+      this.isSearch = false
     }
   }
 }
@@ -148,6 +157,33 @@ export default {
   background-color: #ddd;
 }
 #scores .soughtout {
-  border-bottom: 1px solid #000;
+  height: 0;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  background-color: #e3672a;
+
+  transition: height 1s, opacity 4s;
+}
+.soughtoutContent {
+  height: 25vh !important;
+  opacity: 1 !important;
+
+  transition: height 1s, opacity 4s;
+}
+.x-close {
+  position: absolute;
+  z-index: 99;
+  margin: -8vh 12px;
+  padding: 1px 4px;
+  right: 0;
+  border-radius: 5px;
+  color: #883d19;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.x-close:hover {
+  color: #eea37f;
 }
 </style>

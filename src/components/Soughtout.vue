@@ -33,7 +33,7 @@ export default {
 .result-content {
   width: 80vw;
   padding: 1em;
-  margin: 15px auto;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   cursor: pointer;
