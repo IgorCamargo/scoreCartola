@@ -38,13 +38,18 @@ body {
   background-color: #f2f2f2;
 }
 header {
-  position: relative;
+  position: fixed;
   width: 100%;
   height: 8vh;
   top: 0;
   display: flex;
   align-items: center;
   font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid #9e481d;
+  background-color: #e3672a;
 }
 header span {
   padding: 0 15px;
@@ -58,6 +63,7 @@ header span {
 }
 #app .scores {
   width: 100%;
+  margin-top: 8vh;
 }
 #app .teams {
   overflow-y: auto;
