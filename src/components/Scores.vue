@@ -14,6 +14,7 @@
 
     <div class="soughtout" v-bind:class="{ soughtoutContent: isSearch }">
       <soughtout
+        v-bind:scoreTotal="dataScoreTotal"
         v-bind:logoTeam="dataLogoTeam"
         v-bind:nameTeam="dataNameTeam"
         v-bind:nameUser="dataNameUser"
@@ -48,22 +49,18 @@ export default {
       dataLogoTeam: null,
       dataNameUser: null,
       dataLogoUser: null,
-      slugTeam: null,
+      dataScoreTotal: 0,
+      dataSlugTeam: null,
       isSearch: false
     }
   },
   mounted () {
-    // axios
-    //   .get('https://api.cartolafc.globo.com/rodadas')
-    //   .then(response => (this.info = response))
-    console.log('mounted');
     if(localStorage.getItem('teams')) {
       this.team = localStorage.getItem('teams')
     }
   },
   watch: {
     team: function () {
-      console.log('changed');
       localStorage.setItem('teams', this.team)
     }
   },
@@ -71,41 +68,47 @@ export default {
     searchTeam: function () {
 
       this.show = true
+      var self = this
 
-      var self = this;
       if (( this.nameTeam != null ) && ( this.nameTeam != '' )) {
         axios
-        .get('https://api.cartolafc.globo.com/times?q='+this.nameTeam)
-        .then(function(response){
-          if (response.data.error) {
-            console.log(response.data.message);
-          } else {
-            self.isSearch = true
+          .get('https://api.cartolafc.globo.com/times?q='+this.nameTeam)
+          .then(function(response){
+            if (response.data.error) {
+              console.log(response.data.message);
+            } else {
+              self.isSearch = true
 
-            self.slugTeam = response.data[0].slug
-            self.dataNameTeam = response.data[0].nome
-            self.dataLogoTeam = response.data[0].url_escudo_svg
-            self.dataNameUser = response.data[0].nome_cartola
-            self.dataLogoUser = response.data[0].foto_perfil
+              self.dataSlugTeam = response.data[0].slug
+              self.dataNameTeam = response.data[0].nome
+              self.dataLogoTeam = response.data[0].url_escudo_svg
+              self.dataNameUser = response.data[0].nome_cartola
+              self.dataLogoUser = response.data[0].foto_perfil
 
-            // armazeno o slug e se confirmado clicando adiciona com o scrpt abaixo para trazer a soma dos pontos
-            // axios
-            //   .get('https://api.cartolafc.globo.com/time/slug/'+slug)
-            //   .then(function(response){
-            //     if (response.data.error) {
-            //       console.log(response.data.message);
-            //     } else {
-            //       var teste = response.data;
-            //
-            //       console.log(teste.pontos);
-            //       console.log(teste.rodada_atual);
-            //     }
-            //   });
-          }
-        });
-      }
-      else {
+              if ( self.dataSlugTeam != null ) {
+                axios
+                  .get('https://api.cartolafc.globo.com/time/slug/'+self.dataSlugTeam)
+                  .then(function(response){
+                    if (response.data.error) {
+                      console.log(response.data.message);
+                    } else {
+                      // somatório da pontuação total
+                      for (var i = 0; i < response.data.rodada_atual; i++) {
+                        axios
+                          .get('https://api.cartolafc.globo.com/time/slug/'+self.dataSlugTeam+'/'+(i+1))
+                          .then(function (response) {
+                            self.dataScoreTotal = self.dataScoreTotal + response.data.pontos
+                            self.dataScoreTotal = parseFloat(self.dataScoreTotal.toFixed(2))
+                          })
+                      }
+                    }
+                  });
+                }
+            }
+          });
+      } else {
         console.log('err');
+        this.dataScoreTotal = null
         this.dataNameTeam = null
         this.dataLogoTeam = null
         this.dataNameUser = null
@@ -115,6 +118,7 @@ export default {
       }
     },
     close: function () {
+      this.dataScoreTotal = null
       this.dataNameTeam = null
       this.dataLogoTeam = null
       this.dataNameUser = null

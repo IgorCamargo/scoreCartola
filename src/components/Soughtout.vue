@@ -2,7 +2,7 @@
 
   <div id="soughtout" class="result-content"
     @click="teste"
-    v-if="(logoTeam !== null) && (nameTeam !== null) && (nameUser !== null) && (logoUser !== null)">
+    v-if="(scoreTotal !== null) && (logoTeam !== null) && (nameTeam !== null) && (nameUser !== null) && (logoUser !== null)">
     <div class="result-content-logo">
       <img :src="logoTeam" alt="">
     </div>
@@ -13,6 +13,9 @@
         <div id="nameUser">{{ nameUser }}</div>
       </div>
     </div>
+    <div class="result-content-score">
+      {{ scoreTotal }}
+    </div>
   </div>
 
 </template>
@@ -20,7 +23,7 @@
 <script>
 export default {
   name: 'soughtout',
-  props: ['logoTeam','nameTeam','nameUser','logoUser'],
+  props: ['scoreTotal','logoTeam','nameTeam','nameUser','logoUser'],
   methods: {
     teste: function () {
       alert('hey brother')
@@ -53,7 +56,12 @@ export default {
   height: 75px;
 }
 .result-content-info {
-  width: 75%;
+  width: 60%;
+}
+.result-content-score {
+  width: 15%;
+  color: #989bab;
+  font-weight: bold;
 }
 #nameTeam {
   text-align: left;
