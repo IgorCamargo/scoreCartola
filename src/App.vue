@@ -14,14 +14,12 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 import scores from './components/Scores.vue'
 import teams from './components/Teams.vue'
 
 export default {
   name: 'app',
   components: {
-    // HelloWorld
     scores,
     teams
   }
@@ -34,7 +32,10 @@ export default {
   margin: 0;
   vertical-align: baseline;
   list-style: none;
-  /* border: 0; */
+}
+body {
+  height: 100vh;
+  background-color: #f2f2f2;
 }
 header {
   position: relative;
@@ -44,7 +45,6 @@ header {
   display: flex;
   align-items: center;
   font-size: 18px;
-  /* background-color: yellow; */
 }
 header span {
   padding: 0 15px;
@@ -58,15 +58,9 @@ header span {
 }
 #app .scores {
   width: 100%;
-  /* height: 10vh; */
-  /* display: flex;
-  align-items: center; */
-  /* background-color: darkred; */
 }
 #app .teams {
-  height: 47vh;
   overflow-y: auto;
   border-top: 1px solid #000;
-  background-color: darkblue;
 }
 </style>

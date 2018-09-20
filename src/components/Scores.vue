@@ -132,11 +132,9 @@ export default {
 
 <style lang="css">
 #scores p {
-  width: 100%;
   text-align: center;
   padding: 4vh;
   border-bottom: 1px solid #000;
-  /* background-color: yellow; */
 }
 #scores p input {
   width: 50%;
